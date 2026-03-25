@@ -1,0 +1,121 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Guitar Chord Finder</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@600;700;800&family=Poppins:wght@400;500&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+
+  <!-- Site header + nav -->
+  <header class="site-header">
+    <div class="container">
+      <a class="site-brand" href="https://youkeostudios.com" target="_blank" rel="noopener">
+        <img src="SVG/WORDMARK-COLOUR-WHITE.svg" alt="Youkeo Studios" class="site-logo">
+      </a>
+      <div class="site-tagline">Creative Tools</div>
+    </div>
+  </header>
+
+  <nav class="site-nav">
+    <div class="container nav-inner">
+      <a href="index.html"       class="nav-link active">Guitar Chords</a>
+      <a href="piano.html"       class="nav-link">Piano Chords</a>
+      <a href="progression.html" class="nav-link">Progression Builder</a>
+    </div>
+  </nav>
+
+  <!-- Page content -->
+  <main class="container">
+
+  <div class="page-heading">
+    <h1>Guitar Chord Finder</h1>
+    <div class="page-rule"></div>
+    <p class="page-desc">Explore chords, voicings, and scales for guitar.</p>
+  </div>
+
+  <!-- Row 1: chord finder filters -->
+  <div class="controls" id="chord-controls">
+    <div class="control-group">
+      <label for="note-select">Note</label>
+      <select id="note-select"></select>
+    </div>
+    <div class="control-group">
+      <label for="chord-select">Chord Type</label>
+      <select id="chord-select"></select>
+    </div>
+    <div class="control-group">
+      <label for="position-select">Position</label>
+      <select id="position-select">
+        <option value="all">All</option>
+        <option value="open">Open</option>
+        <option value="barre">Barre</option>
+      </select>
+    </div>
+  </div>
+
+  <!-- Row 2: scale filter (separate row) -->
+  <div class="scale-row">
+    <div class="control-group">
+      <label for="key-select">Key</label>
+      <select id="key-select"></select>
+    </div>
+    <div class="control-group">
+      <label for="scale-type-select">Scale</label>
+      <select id="scale-type-select"></select>
+    </div>
+  </div>
+
+  <!-- Chord finder results (visible when no scale selected) -->
+  <div id="chord-display" class="chord-display">
+    <p class="no-chord">Select a note and chord type to see diagrams.</p>
+  </div>
+
+  <!-- Scale results (visible when a scale is selected) -->
+  <div id="scale-display">
+    <div class="scale-header" id="scale-header"></div>
+    <div class="scale-grid" id="scale-grid"></div>
+  </div>
+
+  <!-- Modal -->
+  <div class="modal-overlay" id="modal-overlay">
+    <div class="modal" id="modal">
+      <button class="modal-close" id="modal-close" aria-label="Close">✕</button>
+      <div class="modal-title" id="modal-title"></div>
+      <div class="modal-subtitle" id="modal-subtitle"></div>
+
+      <!-- Single voicing (chord grid click) -->
+      <div id="modal-diagram"></div>
+
+      <!-- All variations (scale view click) -->
+      <div id="modal-variations">
+        <div class="variations-grid" id="variations-grid"></div>
+      </div>
+
+      <div id="modal-suggest-section">
+        <div class="suggest-label">Goes well with</div>
+        <div class="suggest-row" id="modal-suggestions"></div>
+      </div>
+    </div>
+  </div>
+
+  </main>
+
+  <!-- Site footer -->
+  <footer class="site-footer">
+    <div class="container footer-inner">
+      <a class="footer-brand" href="https://youkeostudios.com" target="_blank" rel="noopener">
+        <span class="brand-studio">Youkeo</span><span class="brand-accent">Studios</span>
+      </a>
+      <span class="footer-copy">Built by <a class="footer-link" href="https://youkeostudios.com" target="_blank" rel="noopener">Youkeo Studios</a> &mdash; All rights reserved</span>
+    </div>
+  </footer>
+
+  <script src="chords.js"></script>
+  <script src="app.js"></script>
+</body>
+</html>

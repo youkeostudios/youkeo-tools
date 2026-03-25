@@ -1,0 +1,111 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Piano Chord Finder — Guitar & Piano Chord Finder</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@600;700;800&family=Poppins:wght@400;500&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+
+  <!-- Site header -->
+  <header class="site-header">
+    <div class="container">
+      <a class="site-brand" href="https://youkeostudios.com" target="_blank" rel="noopener">
+        <img src="SVG/WORDMARK-COLOUR-WHITE.svg" alt="Youkeo Studios" class="site-logo">
+      </a>
+      <div class="site-tagline">Creative Tools</div>
+    </div>
+  </header>
+
+  <nav class="site-nav">
+    <div class="container nav-inner">
+      <a href="index.html"       class="nav-link">Guitar Chords</a>
+      <a href="piano.html"       class="nav-link active">Piano Chords</a>
+      <a href="progression.html" class="nav-link">Progression Builder</a>
+    </div>
+  </nav>
+
+  <main class="container">
+
+    <div class="page-heading">
+      <h1>Piano Chord Finder</h1>
+      <div class="page-rule"></div>
+      <p class="page-desc">Browse chords and inversions for piano across all 12 keys.</p>
+    </div>
+
+    <!-- Controls -->
+    <div class="controls" id="chord-controls">
+      <div class="control-group">
+        <label for="note-select">Note</label>
+        <select id="note-select"></select>
+      </div>
+      <div class="control-group">
+        <label for="chord-select">Chord Type</label>
+        <select id="chord-select"></select>
+      </div>
+    </div>
+
+    <!-- Row 2: scale filter -->
+    <div class="scale-row">
+      <div class="control-group">
+        <label for="key-select">Key</label>
+        <select id="key-select"></select>
+      </div>
+      <div class="control-group">
+        <label for="scale-type-select">Scale</label>
+        <select id="scale-type-select"></select>
+      </div>
+    </div>
+
+    <!-- Chord finder results -->
+    <div id="chord-display" class="chord-display">
+      <p class="no-chord">Select a note and chord type to see diagrams.</p>
+    </div>
+
+    <!-- Scale results -->
+    <div id="scale-display">
+      <div class="scale-header" id="scale-header"></div>
+      <div class="scale-grid"   id="scale-grid"></div>
+    </div>
+
+  </main>
+
+  <!-- Modal -->
+  <div class="modal-overlay" id="modal-overlay">
+    <div class="modal" id="modal">
+      <button class="modal-close" id="modal-close" aria-label="Close">✕</button>
+      <div class="modal-title"    id="modal-title"></div>
+      <div class="modal-subtitle" id="modal-subtitle"></div>
+
+      <div id="modal-diagram"></div>
+
+      <!-- Note pills -->
+      <div class="piano-modal-notes" id="modal-notes"></div>
+
+      <!-- Suggestions -->
+      <div id="modal-suggest-section">
+        <div class="suggest-label">Goes well with</div>
+        <div class="suggest-row" id="modal-suggestions"></div>
+      </div>
+    </div>
+  </div>
+
+  <script src="piano-chords.js"></script>
+  <script src="piano-app.js"></script>
+
+  <!-- Site footer -->
+  <footer class="site-footer">
+    <div class="container footer-inner">
+      <a class="footer-brand" href="https://youkeostudios.com" target="_blank" rel="noopener">
+        <span class="brand-studio">Youkeo</span><span class="brand-accent">Studios</span>
+      </a>
+      <span class="footer-copy">Built by <a class="footer-link" href="https://youkeostudios.com" target="_blank" rel="noopener">Youkeo Studios</a> &mdash; All rights reserved</span>
+    </div>
+  </footer>
+
+</body>
+</html>

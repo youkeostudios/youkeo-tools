@@ -1,0 +1,118 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Chord Progression Builder — Guitar Chord Finder</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@600;700;800&family=Poppins:wght@400;500&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+
+  <!-- Site header -->
+  <header class="site-header">
+    <div class="container">
+      <a class="site-brand" href="https://youkeostudios.com" target="_blank" rel="noopener">
+        <img src="SVG/WORDMARK-COLOUR-WHITE.svg" alt="Youkeo Studios" class="site-logo">
+      </a>
+      <div class="site-tagline">Creative Tools</div>
+    </div>
+  </header>
+
+  <nav class="site-nav">
+    <div class="container nav-inner">
+      <a href="index.html"       class="nav-link">Guitar Chords</a>
+      <a href="piano.html"       class="nav-link">Piano Chords</a>
+      <a href="progression.html" class="nav-link active">Progression Builder</a>
+    </div>
+  </nav>
+
+  <main class="container">
+
+    <div class="page-heading">
+      <h1>Progression Builder</h1>
+      <div class="page-rule"></div>
+      <p class="page-desc">Build chord progressions, pick voicings, and explore how chords move together.</p>
+    </div>
+
+    <!-- Instrument toggle -->
+    <div class="instr-toggle" id="instr-toggle">
+      <button class="instr-btn active" data-instr="guitar">Guitar</button>
+      <button class="instr-btn" data-instr="piano">Piano</button>
+    </div>
+
+    <!-- Controls: key + scale + presets + clear -->
+    <div class="prog-controls">
+      <div class="prog-key-scale">
+        <div class="control-group">
+          <label for="prog-key">Key</label>
+          <select id="prog-key"></select>
+        </div>
+        <div class="control-group">
+          <label for="prog-scale">Scale</label>
+          <select id="prog-scale"></select>
+        </div>
+      </div>
+      <div class="prog-presets">
+        <label>Common Progressions</label>
+        <div class="preset-buttons" id="preset-buttons"></div>
+      </div>
+      <button class="btn-clear" id="btn-clear">Clear</button>
+    </div>
+
+    <!-- Scale suggestions (shown when key + scale are selected) -->
+    <div class="scale-suggestions" id="scale-suggestions" style="display:none">
+      <div class="scale-suggestions-label" id="scale-suggestions-label"></div>
+      <div class="scale-suggestions-grid" id="scale-suggestions-grid"></div>
+    </div>
+
+    <!-- Progression display -->
+    <div class="progression-area">
+      <div class="progression-slots" id="progression-slots">
+        <p class="progression-empty">No chords yet — load a preset or add chords below.</p>
+      </div>
+      <button class="btn-add-slot" id="btn-add-slot" title="Add chord">+</button>
+    </div>
+
+    <!-- Chord picker panel -->
+    <div class="chord-picker" id="chord-picker">
+      <div class="picker-heading" id="picker-heading">Add a Chord</div>
+
+      <div class="picker-selects">
+        <div class="control-group">
+          <label for="picker-note">Note</label>
+          <select id="picker-note"></select>
+        </div>
+        <div class="control-group">
+          <label for="picker-type">Chord Type</label>
+          <select id="picker-type"></select>
+        </div>
+      </div>
+
+      <div class="picker-voicings" id="picker-voicings"></div>
+
+      <div class="picker-actions">
+        <button class="btn-commit" id="btn-commit">Add to Progression</button>
+        <button class="btn-cancel-edit" id="btn-cancel-edit">Cancel</button>
+      </div>
+    </div>
+
+  </main>
+
+  <!-- Site footer -->
+  <footer class="site-footer">
+    <div class="container footer-inner">
+      <a class="footer-brand" href="https://youkeostudios.com" target="_blank" rel="noopener">
+        <span class="brand-studio">Youkeo</span><span class="brand-accent">Studios</span>
+      </a>
+      <span class="footer-copy">Built by <a class="footer-link" href="https://youkeostudios.com" target="_blank" rel="noopener">Youkeo Studios</a> &mdash; All rights reserved</span>
+    </div>
+  </footer>
+
+  <script src="chords.js"></script>
+  <script src="piano-chords.js"></script>
+  <script src="progression.js"></script>
+</body>
+</html>
