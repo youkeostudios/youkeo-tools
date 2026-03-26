@@ -322,26 +322,31 @@ CHORD_TYPES.forEach(ct => {
   pickerTypeEl.appendChild(opt);
 });
 
-// ── Build preset buttons (filtered by active scale mode) ──────────────────
+// ── Build preset buttons (hidden until a scale is selected) ───────────────
+const progPresetsEl = document.querySelector('.prog-presets');
+
 function renderPresets() {
   const activeScale = getActiveProgScale();
-  const scaleType   = activeScale ? activeScale.type : null;
 
-  // Determine which mode to show: major-like vs minor-like scales
+  if (!activeScale) {
+    progPresetsEl.style.display = 'none';
+    return;
+  }
+
   const minorScales = new Set(['minor', 'minorPent', 'dorian']);
-  const filterMode  = scaleType
-    ? (minorScales.has(scaleType) ? 'minor' : 'major')
-    : null;
+  const filterMode  = minorScales.has(activeScale.type) ? 'minor' : 'major';
 
   presetButtonsEl.innerHTML = '';
   PRESETS.forEach(preset => {
-    if (filterMode && preset.mode !== filterMode) return;
+    if (preset.mode !== filterMode) return;
     const btn = document.createElement('button');
     btn.className = 'preset-btn';
     btn.textContent = preset.name;
     btn.addEventListener('click', () => loadPreset(preset));
     presetButtonsEl.appendChild(btn);
   });
+
+  progPresetsEl.style.display = '';
 }
 
 renderPresets();
@@ -618,6 +623,94 @@ instrToggleEl.addEventListener('click', e => {
   renderScaleSuggestions();
   renderPresets();
 });
+
+// ── MIDI generation ────────────────────────────────────────────────────────
+
+// Guitar open-string MIDI note numbers: E2 A2 D3 G3 B3 E4
+const GUITAR_OPEN_MIDI = [40, 45, 50, 55, 59, 64];
+
+function toVarLen(n) {
+  if (n < 0x80) return [n];
+  const out = [n & 0x7F];
+  n >>= 7;
+  while (n > 0) { out.unshift((n & 0x7F) | 0x80); n >>= 7; }
+  return out;
+}
+
+function u32(n) {
+  return [(n >>> 24) & 0xFF, (n >>> 16) & 0xFF, (n >>> 8) & 0xFF, n & 0xFF];
+}
+
+function u16(n) { return [(n >>> 8) & 0xFF, n & 0xFF]; }
+
+function slotMidiNotes(slot) {
+  const voicings = (getActiveData()[slot.note] || {})[slot.chordType] || [];
+  const voicing  = voicings[slot.voicingIdx] || voicings[0];
+  if (!voicing) return [];
+  if (instrMode === 'piano') {
+    return voicing.notePositions.map(pos => 60 + pos);
+  }
+  return voicing.frets
+    .map((fret, i) => fret < 0 ? -1 : GUITAR_OPEN_MIDI[i] + fret)
+    .filter(n => n >= 0);
+}
+
+function buildMidiFile() {
+  const chords = slots.map(slotMidiNotes).filter(n => n.length > 0);
+  if (!chords.length) return null;
+
+  const TICKS      = 480;
+  const BPM        = 80;
+  const TEMPO      = Math.round(60000000 / BPM); // µs per beat
+  const NOTE_TICKS = TICKS * 4;                  // 1 bar per chord
+  const VEL        = 80;
+  const CH         = 0;
+  const PROGRAM    = instrMode === 'piano' ? 0 : 25; // Grand Piano / Steel Guitar
+
+  const ev = [];
+  const push = (...b) => b.forEach(x => ev.push(x));
+  const pushVL = n => toVarLen(n).forEach(x => ev.push(x));
+
+  // Tempo meta-event
+  push(0x00, 0xFF, 0x51, 0x03,
+    (TEMPO >>> 16) & 0xFF, (TEMPO >>> 8) & 0xFF, TEMPO & 0xFF);
+
+  // Program change
+  push(0x00, 0xC0 | CH, PROGRAM);
+
+  chords.forEach(notes => {
+    // Note-ons (all at same tick — delta 0 each)
+    notes.forEach(note => { pushVL(0); push(0x90 | CH, note, VEL); });
+    // Note-offs after NOTE_TICKS
+    notes.forEach((note, i) => {
+      pushVL(i === 0 ? NOTE_TICKS : 0);
+      push(0x80 | CH, note, 0);
+    });
+  });
+
+  // End of track
+  push(0x00, 0xFF, 0x2F, 0x00);
+
+  const header = [0x4D,0x54,0x68,0x64, ...u32(6), ...u16(0), ...u16(1), ...u16(TICKS)];
+  const track  = [0x4D,0x54,0x72,0x6B, ...u32(ev.length), ...ev];
+
+  return new Uint8Array([...header, ...track]);
+}
+
+function downloadMidi() {
+  if (!slots.length) return;
+  const bytes = buildMidiFile();
+  if (!bytes) return;
+  const blob = new Blob([bytes], { type: 'audio/midi' });
+  const url  = URL.createObjectURL(blob);
+  const a    = document.createElement('a');
+  a.href     = url;
+  a.download = 'progression.mid';
+  a.click();
+  URL.revokeObjectURL(url);
+}
+
+document.getElementById('btn-download-midi').addEventListener('click', downloadMidi);
 
 // ── Init ───────────────────────────────────────────────────────────────────
 pickerNoteEl.value = 'C';
